@@ -1,0 +1,6 @@
+{
+  "name": "Nexforge",
+  "description": "AI-powered Production Planning Assistant providing demand forecasting, inventory safety optimization, capacity feasibility analysis, and intelligent decision support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

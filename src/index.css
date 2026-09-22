@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+:root {
+  font-family: "Manrope", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+body {
+  font-family: "Manrope", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  .type-heading-xl {
+    font-family: var(--font-sans);
+    font-size: 1.75rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  @media (min-width: 640px) {
+    .type-heading-xl {
+      font-size: 2.125rem;
+    }
+  }
+
+  .type-heading-l {
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  @media (min-width: 640px) {
+    .type-heading-l {
+      font-size: 1.5rem;
+    }
+  }
+
+  .type-heading-m {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  @media (min-width: 640px) {
+    .type-heading-m {
+      font-size: 1.125rem;
+    }
+  }
+
+  .type-body {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .type-body-sm {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .type-label-caps {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .type-metric {
+    font-family: var(--font-sans);
+    font-feature-settings: 'tnum' 1, 'lnum' 1;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .type-button {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  @keyframes radarSweep {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(249, 115, 22, 0.4)); }
+    50% { opacity: 1; filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.7)); }
+  }
+
+  @keyframes industrialScan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(1000%); }
+  }
+
+  .animate-radar {
+    animation: radarSweep 8s linear infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2.5s ease-in-out infinite;
+  }
+
+  .scanline-overlay {
+    background: linear-gradient(
+      rgba(18, 16, 16, 0) 50%, 
+      rgba(0, 0, 0, 0.25) 50%
+    ), linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.03),
+      rgba(0, 255, 0, 0.01),
+      rgba(0, 0, 255, 0.03)
+    );
+    background-size: 100% 3px, 4px 100%;
+    pointer-events: none;
+  }
+
+  .industrial-grid-bg {
+    background-image: radial-gradient(rgba(249, 115, 22, 0.08) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+}
