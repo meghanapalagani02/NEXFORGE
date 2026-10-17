@@ -78,7 +78,7 @@ export interface QuantumBackendStatus {
 }
 
 const API_BASE_URL: string =
-  (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL || '';
+  (import.meta as unknown as { env?: { VITE_API_URL?: string; VITE_API_BASE_URL?: string } }).env?.VITE_API_URL || (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env?.VITE_API_BASE_URL || '';
 
 class QuantumApiService {
   /**

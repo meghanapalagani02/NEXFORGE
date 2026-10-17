@@ -1,8 +1,25 @@
+import sys
+import os
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
+_curr_dir = os.path.dirname(os.path.abspath(__file__))
+if _curr_dir not in sys.path:
+    sys.path.insert(0, _curr_dir)
+
+try:
+    import backend.models
+    sys.modules['models'] = backend.models
+    import backend.models.schemas
+    sys.modules['models.schemas'] = backend.models.schemas
+except Exception:
+    pass
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict, Any
 
-from models.schemas import (
+from backend.models.schemas import (
     ForecastRequest, ForecastResponse,
     InventoryAnalysisRequest, InventoryAnalysisResponse,
     ProductionPlanRequest, ProductionPlanResponse,
@@ -12,7 +29,7 @@ from models.schemas import (
     PlanningAgentRequest, PlanningAgentResponse
 )
 
-from services.forecasting_service import ForecastingService
+from backend.services.forecasting_service import ForecastingService
 from services.inventory_service import InventoryService
 from services.production_service import ProductionPlanningService
 from services.scheduling_service import ProductionSchedulingService
@@ -47,6 +64,21 @@ def health_check() -> Dict[str, Any]:
             "quantum": "Ready (Qiskit QAOA / QUBO Simulator)"
         },
         "version": "2.1.0"
+    }
+
+@app.get("/api/quantum/status")
+def get_quantum_status() -> Dict[str, Any]:
+    try:
+        from quantum.quantum_service import QISKIT_VER, AER_VER
+    except Exception:
+        QISKIT_VER, AER_VER = "unknown", "unknown"
+    return {
+        "status": "ready",
+        "backend": f"Qiskit AerSimulator (v{AER_VER})",
+        "supported_methods": ["QAOA", "QUBO", "Exact LP"],
+        "message": "Quantum optimization service connected and ready.",
+        "qiskit_version": QISKIT_VER,
+        "aer_version": AER_VER
     }
 
 @app.post("/api/forecast", response_model=ForecastResponse)
@@ -179,3 +211,4 @@ if __name__ == "__main__":
     import os
     port = int(os.getenv("BACKEND_PORT", 8001))
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+

@@ -220,6 +220,12 @@ class QuantumOptimizationResponse(BaseModel):
     validationChecks: Dict[str, bool]
     violations: List[str] = []
     technicalDetails: Dict[str, Any]
+    statusMessage: Optional[str] = None
+    quantum: Optional[Dict[str, Any]] = None
+    solution: Optional[Dict[str, Any]] = None
+    validation: Optional[Dict[str, Any]] = None
+    fallback: Optional[Dict[str, Any]] = None
+    timestamp: Optional[str] = None
 
 # 7. AI Planning Explainer Schemas
 class PlanningAgentRequest(BaseModel):
@@ -237,3 +243,4 @@ class PlanningAgentResponse(BaseModel):
     supportingStats: Dict[str, Any]
     suggestedAction: str
     confidenceScore: float = 0.98
+

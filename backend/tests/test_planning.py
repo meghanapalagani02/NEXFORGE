@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import pytest
 from models.schemas import (
     HistoricalPoint,
@@ -98,3 +101,4 @@ def test_quantum_optimization_execution():
         "Classical Fallback Used - Quantum Candidate Infeasible"
     ]
     assert "validationChecks" in res.model_dump()
+

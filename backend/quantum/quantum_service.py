@@ -173,8 +173,9 @@ class QuantumOptimizationService:
                 fallback_reason = f"Quantum candidate had {len(violations)} constraint violation(s): " + "; ".join(violations[:2])
 
             logger.warning(f"[FALLBACK] {status}: {fallback_reason}. Invoking High-Performance Classical LP...")
+            prod_payload = [p.model_dump() if hasattr(p, "model_dump") else p for p in prods]
             lp_req = ProductionPlanRequest(
-                products=prods,
+                products=prod_payload,
                 monthlyDemands=demands,
                 horizonMonths=num_periods,
                 monthlyCapacity=capacity
@@ -236,6 +237,34 @@ class QuantumOptimizationService:
             "candidateViolations": violations
         }
 
+        from datetime import datetime, timezone
+        status_msg = f"{status}. Simulator: Qiskit Aer (v{AER_VER}). Qubits: {meta['totalQubits']}, Circuit Depth: {qaoa_result.get('circuit_depth', 0)}."
+
+        quantum_payload = {
+            "executed": True,
+            "backend": f"Qiskit AerSimulator (v{AER_VER})",
+            "num_qubits": meta["totalQubits"],
+            "qaoa_reps": p_steps,
+            "shots": shots,
+            "execution_time_seconds": round(qaoa_result.get("execution_time_ms", 0.0) / 1000.0, 3)
+        }
+
+        solution_payload = {
+            "production_plan": production_plan_rows,
+            "objective_value": round(qaoa_result.get("objective_value", 0.0), 2),
+            "total_cost": round(total_cost, 0)
+        }
+
+        validation_payload = {
+            "feasible": is_feasible,
+            "violations": violations
+        }
+
+        fallback_payload = {
+            "used": fallback_used,
+            "reason": fallback_reason
+        }
+
         return QuantumOptimizationResponse(
             status=status,
             statusCode=status_code,
@@ -253,5 +282,12 @@ class QuantumOptimizationService:
             totalCost=round(total_cost, 0),
             validationChecks=validation_dict,
             violations=violations,
-            technicalDetails=technical_details
+            technicalDetails=technical_details,
+            statusMessage=status_msg,
+            quantum=quantum_payload,
+            solution=solution_payload,
+            validation=validation_payload,
+            fallback=fallback_payload,
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
+
